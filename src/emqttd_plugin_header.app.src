@@ -1,0 +1,12 @@
+{application, emqttd_plugin_header,
+ [
+  {description, "Plugin to add JSON header to every published MQTT messages"},
+  {vsn, "1.0.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { emqttd_plugin_header_app, []}},
+  {env, []}
+ ]}.
