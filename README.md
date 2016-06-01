@@ -46,20 +46,29 @@ pong.on('message', function(topic, message){
 
 ## How to build?
 
+```shell
+cd emqttd
+```
+
 Add the plugin as submodule of `emqttd` project.
 
 If the submodules exist:
 
 ```shell
-git submodule update --remote plugins/emqttd_plugin_redis
+git submodule update --remote plugins/emqttd_plugin_header
 ```
 
 Or else:
 ```shell
-git submodule add https://github.com/emqtt/emqttd_plugin_redis.git  plugins/emqttd_plugin_redis
+git submodule add https://github.com/anhldbk/emqttd_plugin_header  plugins/emqttd_plugin_header
 ```
 
-And then build emqttd project.
+And then build emqttd project via
+
+```shell
+make
+make dist
+```
 
 ## How to use?
 Activate the plugin by the following command:
@@ -72,3 +81,4 @@ bin/emqttd_ctl plugins load emqttd_plugin_header
 [Anh Le](https://github.com/anhldbk).
 
 Thank you [Feng Lee](https://github.com/emqplus) for the great broker
+
