@@ -7,8 +7,10 @@ This plugin is for `eMQTT`. It adds a header containing meta data for every publ
 The headers is in JSON format:
 ```js
 {
-  "from": "user-who-published-the-message",
-  timestamp: <int, time at which the message received by eMQTT>
+  "from": "<sender who published the messsage>",
+  "timestamp": "<int, epoch time at which the message received by eMQTT>",
+  "ip": "<ip adress of sender>",
+  "port": "<port of sender>"
 }
 ```
 
@@ -40,15 +42,11 @@ pong.on('message', function(topic, message){
   console.log(message);
 })
 
-// if you run the code above, it will print:
-// { "from": "pong", "timestamp": 1464754795043 }\nHolla
+// if you run the code above, it will print something out like:
+// { "from": "pong", "timestamp": 1464754795043, "ip": "127.0.0.1", "port": 44952}\nHolla
 ```
 
 ## How to build?
-
-```shell
-cd emqttd
-```
 
 Add the plugin as submodule of `emqttd` project.
 
@@ -77,8 +75,11 @@ Activate the plugin by the following command:
 bin/emqttd_ctl plugins load emqttd_plugin_header
 ```
 
+## History
+- June 1st, 2016: released version 1.0.0
+- July 15th, 2016: released version 1.0.1. Added `ip` & `port` into headers.
+
 ## Author
 [Anh Le](https://github.com/anhldbk).
 
 Thank you [Feng Lee](https://github.com/emqplus) for the great broker
-

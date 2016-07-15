@@ -70,26 +70,27 @@ on_client_unsubscribe(ClientId, Topics, _Env) ->
 on_message_publish(Message = #mqtt_message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
 
-on_message_publish(Message = #mqtt_message{sender = Sender, payload = Payload}, _Env) ->
-    % new_payload=list_to_binary(
-    %     io_lib:format(
-    %         "{ \"from\": \"~s\" }~n~s~n",
-    %         ["Sender", "Payload"]
-    %     )
-    % ),
-    Header = list_to_binary(
-      io_lib:format(
-          "{ \"from\": ~p, \"timestamp\": ~p }~n",
-          [binary_to_list(Sender), get_timestamp()]
-      )
-    ),
-    NewPayLoad = << Header/binary, Payload/binary >>,
-    % lists:flatten(Header),
-    % io:format(Header, []),
-    Msg = Message#mqtt_message{
-        payload=NewPayLoad
-    },
-    {ok, Msg}.
+on_message_publish(Message = #mqtt_message{sender = Sender, from = ClientId, payload = Payload}, _Env) ->
+    case emqttd_cm:lookup(ClientId) of
+       undefined -> 
+           {ok, Message};
+        Client ->
+            Address = Client#mqtt_client.peername,
+            IP = inet_parse:ntoa( element( 1, Address ) ),
+            Port = element( 2, Address ),
+            Header = list_to_binary(
+              io_lib:format(
+                  "{ \"from\": ~p, \"timestamp\": ~p, \"ip\": ~p, \"port\": ~p }~n",
+                  [binary_to_list(Sender), get_timestamp(), IP, Port]
+              )
+            ),
+            NewPayLoad = << Header/binary, Payload/binary >>,
+            Msg = Message#mqtt_message{
+                payload=NewPayLoad
+            },
+            {ok, Msg}
+    end.
+
 
 on_message_delivered(ClientId, Message, _Env) ->
     io:format("delivered to client ~s: ~s~n", [ClientId, emqttd_message:format(Message)]),
