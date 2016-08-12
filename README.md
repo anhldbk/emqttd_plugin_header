@@ -76,8 +76,15 @@ bin/emqttd_ctl plugins load emqttd_plugin_header
 ```
 
 ## History
-- June 1st, 2016: released version 1.0.0
-- July 15th, 2016: released version 1.0.1. Added `ip` & `port` into headers.
+
+#### 1.0.0 / June 1st, 2016
+- Released the very first version. Headers added will contain fields `from` & `timestamp`
+
+#### 1.0.1 / July 15th, 2016
+- Added `ip` & `port` into headers
+
+#### 1.0.1 / August 12th, 2016
+- Fixed for messages with empty payload. Such messages will not be added with headers. This allows users to clear `retained` messages by publishing empty ones
 
 ## Author
 [Anh Le](https://github.com/anhldbk).
